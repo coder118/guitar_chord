@@ -8,9 +8,21 @@
     <h1>검색 결과</h1>
     <a href="/">다시 검색</a>
     <div>
-        {% for img in images %}
-            <img src="{{ img }}" alt="Image" style="width: 200px; height: auto;">
-        {% endfor %}
+        
+        {% if images[0]|length > 1 %}
+                <!-- 이중 배열의 경우 여러개의 코드 동시검색시-->
+                {% for i in images %}
+                    {% for img in i %}
+                        <img src="{{ img }}" alt="Image" style="width: 200px; height: auto;">
+                    {% endfor %}
+                {% endfor %}
+        {% else %}
+                <!-- 단일 배열의 경우 한개의 코드만 검색시 -->
+                <h2>단일 검색 결과</h2>
+                {% for img in images[0] %}
+                    <img src="{{ img }}" alt="Image" style="width: 200px; height: auto;">
+                {% endfor %}
+        {% endif %}
     </div>
 </body>
 </html>
