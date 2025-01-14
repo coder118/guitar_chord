@@ -26,13 +26,22 @@ def search():
         image_urls=[]
         for c in chords:
             image_urls.append(crawl_images2("기타"+ c + "코드" ))
+        #image_urls = crawl_images_for_chords(chords)
     except:# 쿼리문내부에 콤마로 문자열이 나뉘지 않은경우
         image_urls = crawl_images2("기타 "+ query + "코드")
     
     print("good111")
     #crawl_images2(query)
-    print("imageurl",image_urls)
-    return render_template('result.html',images = image_urls)
+    #print("imageurl",image_urls)
+    return render_template('result.html',images = image_urls, query=chords)
+
+# from concurrent.futures import ThreadPoolExecutor
+
+# def crawl_images_for_chords(chords):
+#     with ThreadPoolExecutor() as executor:
+#         results = list(executor.map(crawl_images2, ["기타 " + chord + " 코드" for chord in chords]))
+#     return results
+
 
 def crawl_images(query):
     url = f"https://www.google.com/search?hl=ko&tbm=isch&q={query}"
@@ -54,16 +63,18 @@ from webdriver_manager.chrome import ChromeDriverManager
 def crawl_images2(query):
     print('crawl2222222')
     driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-    url = f"https://www.google.com/search?hl=ko&tbm=isch&q={query}"
+    from urllib.parse import quote
+    encoded_query = quote(query) #기타의 #같은 특수문자를 인식을 못해서 인코딩해줌
+    url = f"https://www.google.com/search?hl=ko&tbm=isch&q={encoded_query}"
     
  
     driver.get(url)
-    WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, "//img[contains(@class, 'YQ4gaf')]")))
+    WebDriverWait(driver, 3).until(EC.presence_of_all_elements_located((By.XPATH, "//img[contains(@class, 'YQ4gaf')]")))
     
     img_elements = driver.find_elements(By.XPATH, "//img[contains(@class, 'YQ4gaf')]")#[contains(@class, 'YQ4gaf')]
     
     print("good222")
-    print('img_elements',img_elements)
+    #print('img_elements',img_elements)
     iurl=[]
     i=0 #보니까 img_elements에서 이미지를 제한을 해버리면 그 페이지에 있는 이상한 이미지들도 전부다 가져와버린다. 그래서 i를 이용해 3장이상 추가되지 않게끔 바꿈/ 여기서 조정을 할 수 있는 기능을 넣어도 좋겟다.
     for img in img_elements:
@@ -81,7 +92,7 @@ def crawl_images2(query):
                 break
     
     driver.quit()
-    print('iurl',iurl)
+    #print('iurl',iurl)
     return iurl
 
 #셀레니움을 사용해서 값은 다 뽑히는데 문제는 1 번 크롤링은 사이트로 해서 이미지가 다 나오는데 
