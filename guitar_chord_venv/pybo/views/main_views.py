@@ -31,8 +31,6 @@ def search():
         image_urls = crawl_images2("기타 "+ query + "코드")
     
     print("good111")
-    #crawl_images2(query)
-    #print("imageurl",image_urls)
     return render_template('result.html',images = image_urls, query=chords)
 
 # from concurrent.futures import ThreadPoolExecutor
@@ -49,12 +47,12 @@ def crawl_images(query):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
     }
     response = requests.get(url, headers=headers)
-    #print('response',response)
+    
     soup = BeautifulSoup(response.text, 'html.parser')
-    #print('soup',soup)
+    
     img_tags = soup.find_all('img')
     image_urls = [img['src'] for img in img_tags if 'src' in img.attrs]
-    #print("checking!!!!!!",image_urls)
+    
     return image_urls[:10]  # 상위 10개 이미지만 반환
 
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -74,7 +72,6 @@ def crawl_images2(query):
     img_elements = driver.find_elements(By.XPATH, "//img[contains(@class, 'YQ4gaf')]")#[contains(@class, 'YQ4gaf')]
     
     print("good222")
-    #print('img_elements',img_elements)
     iurl=[]
     i=0 #보니까 img_elements에서 이미지를 제한을 해버리면 그 페이지에 있는 이상한 이미지들도 전부다 가져와버린다. 그래서 i를 이용해 3장이상 추가되지 않게끔 바꿈/ 여기서 조정을 할 수 있는 기능을 넣어도 좋겟다.
     for img in img_elements:
@@ -92,7 +89,6 @@ def crawl_images2(query):
                 break
     
     driver.quit()
-    #print('iurl',iurl)
     return iurl
 
 #셀레니움을 사용해서 값은 다 뽑히는데 문제는 1 번 크롤링은 사이트로 해서 이미지가 다 나오는데 
