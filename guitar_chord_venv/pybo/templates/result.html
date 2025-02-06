@@ -3,19 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>검색 결과</title>
+{% comment %} 
+    <style>
+        .image {
+            overflow: hidden;
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+        .image:hover {
+            --zoom: 2;
+        }
+        .image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(var(--zoom, 1));
+            transform-origin: var(--x) var(--y);
+            transition: transform 0.3s ease;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> {% endcomment %}
+
 </head>
 <body>
     <h1>검색 결과</h1>
     <a href="/">다시 검색</a>
     <div>
-        {% if images[0]|length > 1 %}
+        {% if query|length > 1 %}
                 <!-- 이중 배열의 경우 여러개의 코드 동시검색시 +-->
                 {% for  i in range(query|length) %} <!--검색된 이미지의 개수를 세고 query에 들어있는 코드의 이름을 인덱스를 통해 출력함(콤마가 있어서 홀수 값만 출력해야 함), 이미지 값도 인덱스를 이용해 출력-->
                     
                         <h2>{{ query[i] }} 코드</h2>
                     
                     {% for img in images[i] %}
-                        <img src="{{ img }}" alt="Image" style="width: 200px; height: auto;">
+                        <div class="image">
+                            <img src="{{ img }}" alt="Image" style="width: 200px; height: auto;">
+                        </div>
                     {% endfor %}
                     <hr>
                 {% endfor %}
@@ -23,9 +50,26 @@
                 <!-- 단일 배열의 경우 한개의 코드만 검색시 -->
                 <h2>단일 검색 결과</h2>
                 {% for img in images[0] %}
+                <div class="image">
                     <img src="{{ img }}" alt="Image" style="width: 200px; height: auto;">
+                </div>
                 {% endfor %}
         {% endif %}
     </div>
+    {% comment %} <script>
+        $('.image').on('mouseenter', function() {
+            const rect = this.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+            
+            $(this).off('mousemove').on('mousemove', function(e) {
+                const xPos = (e.clientX - rect.left) / width * 100;
+                const yPos = (e.clientY - rect.top) / height * 100;
+                
+                $(this).css('--x', xPos + '%');
+                $(this).css('--y', yPos + '%');
+            });
+        });
+    </script> {% endcomment %}
 </body>
 </html>
