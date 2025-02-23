@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>검색 결과</title>
-{% comment %} 
+<!--
     <style>
         .image {
             overflow: hidden;
@@ -26,8 +26,14 @@
             transition: transform 0.3s ease;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> {% endcomment %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <style>
 
+        .image {
+            display: inline-block;
+            margin: 5px;
+        }
+    </style>
 </head>
 <body>
     <h1>검색 결과</h1>
@@ -40,9 +46,11 @@
                         <h2>{{ query[i] }} 코드</h2>
                     
                     {% for img in images[i] %}
-                        <div class="image">
-                            <img src="{{ img }}" alt="Image" style="width: 200px; height: auto;">
-                        </div>
+                    
+                            <div class="image">
+                                <img src="{{ img }}" alt="Image" style="width: 200px; height: auto;">
+                            </div>
+                        
                     {% endfor %}
                     <hr>
                 {% endfor %}
@@ -50,13 +58,14 @@
                 <!-- 단일 배열의 경우 한개의 코드만 검색시 -->
                 <h2>단일 검색 결과</h2>
                 {% for img in images[0] %}
-                <div class="image">
-                    <img src="{{ img }}" alt="Image" style="width: 200px; height: auto;">
-                </div>
+                    <div class="image">
+                        <img src="{{ img }}" alt="Image" style="width: 200px; height: auto;">
+                    </div>
+                
                 {% endfor %}
         {% endif %}
     </div>
-    {% comment %} <script>
+    <!--<script>
         $('.image').on('mouseenter', function() {
             const rect = this.getBoundingClientRect();
             const width = rect.width;
@@ -70,6 +79,6 @@
                 $(this).css('--y', yPos + '%');
             });
         });
-    </script> {% endcomment %}
+    </script> -->
 </body>
 </html>
